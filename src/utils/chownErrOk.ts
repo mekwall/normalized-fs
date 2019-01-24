@@ -11,13 +11,12 @@
 // When running as root, or if other types of errors are
 // encountered, then it's strict.
 export const chownErrOk = (err?: NodeJS.ErrnoException | null) => {
-  if (!err || err.code === 'ENOSYS') return true;
-  const nonRoot = !process.getuid || process.getuid() !== 0;
-  if (nonRoot) {
-    if (err.code === 'EINVAL' || err.code === 'EPERM') {
-      return true;
-    }
+  if (!err || err.code === 'ENOSYS') {
+    return true;
   }
-  console.error(err);
+  const nonRoot = !process.getuid || process.getuid() !== 0;
+  if (nonRoot && (err.code === 'EINVAL' || err.code === 'EPERM')) {
+    return true;
+  }
   return false;
 };

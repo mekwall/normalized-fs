@@ -6,15 +6,15 @@ function chmodFix<T extends any>(fs: typeof orgFs, orig: T): T {
   const newFunc: any = function(
     path: orgFs.PathLike,
     mode: string | number,
-    callback: (err: NodeJS.ErrnoException) => void
+    callback: (err?: NodeJS.ErrnoException | null) => void
   ) {
     return orig.call(fs, path, mode, function(
-      err: NodeJS.ErrnoException | null
+      err?: NodeJS.ErrnoException | null
     ) {
       if (chownErrOk(err)) {
         err = null;
       }
-      if (callback) callback.apply(fs, arguments as any);
+      if (callback) callback.call(fs, err);
     });
   };
   return newFunc as T;

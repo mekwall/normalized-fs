@@ -7,15 +7,15 @@ function chownFix<T extends Function>(fs: typeof orgFs, orig: T): T {
     path: orgFs.PathLike,
     uid: number,
     gid: number,
-    callback: (err: NodeJS.ErrnoException) => void
+    callback: (err?: NodeJS.ErrnoException | null) => void
   ) {
     return orig.call(fs, path, uid, gid, function(
-      er?: NodeJS.ErrnoException | null
+      err?: NodeJS.ErrnoException | null
     ) {
-      if (chownErrOk(er)) {
-        er = null;
+      if (chownErrOk(err)) {
+        err = null;
       }
-      if (callback) callback.apply(fs, arguments as any);
+      if (callback) callback.call(fs, err);
     });
   };
   return newChown as T;
