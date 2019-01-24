@@ -1,7 +1,7 @@
 {
   "name": "normalized-fs",
   "description": "A drop-in replacement for fs that normalizes its behavior",
-  "version": "0.0.0-semantic",
+  "version": "1.0.0-alpha.1",
   "keywords": [
     "fs",
     "module",
