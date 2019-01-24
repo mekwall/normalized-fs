@@ -23,7 +23,9 @@ commands:
       - restore_deps
       - run:
           name: Install dependencies
-          command: yarn install
+          command: |
+            yarn config set ignore-engines true
+            yarn install
       - save_deps
       - run:
           name: Build
