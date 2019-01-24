@@ -7,14 +7,18 @@
 
 A drop-in replacement for `fs` that aims to normalize the behavior across different platforms and environments, and to make filesystem access more resilient to errors.
 
-## Improvements over [fs module](https://nodejs.org/api/fs.html)
+## Overall improvements over [fs module](https://nodejs.org/api/fs.html)
 
-- Queues up open and readdir calls, and retries them once something closes if there is an EMFILE error from too many file descriptors.
-- Fixes lchmod for Node versions prior to 0.6.2.
-- Implements fs.lutimes if possible. Otherwise it becomes a noop.
+- Queues up open and readdir calls, and retries them once something closes if there is an EMFILE error from too many open file descriptors.
+- Fixes broken lchmod for Node versions prior to 0.6.2.
+- Implements fs.lutimes if possible, otherwise it becomes a no-op.
 - Ignores EINVAL and EPERM errors in chown, fchown or lchown if the user isn't root.
-- Makes lchmod and lchown become noops, if not available.
+- If lchmod and lchown are unavailable, they become no-ops.
 - Retries reading a file if read results in EAGAIN error.
+
+### Windows-specific improvements
+
+- It makes renaming more resilient by retrying a rename for up to 60 seconds if EACCESS or EPERM error occurs. This can happen if the path has been locked by another process.
 
 ## Installation
 
