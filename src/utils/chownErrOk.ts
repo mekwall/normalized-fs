@@ -14,7 +14,8 @@ export const chownErrOk = (err?: NodeJS.ErrnoException | null) => {
   if (!err || err.code === 'ENOSYS') {
     return true;
   }
-  const nonRoot = !process.getuid || process.getuid() !== 0;
+  const nonRoot =
+    process.env.NFS_FAKE_NOROOT || !process.getuid || process.getuid() !== 0;
   if (nonRoot && (err.code === 'EINVAL' || err.code === 'EPERM')) {
     return true;
   }

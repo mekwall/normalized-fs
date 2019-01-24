@@ -1,4 +1,5 @@
 const realFs: any = require('fs');
+process.env.NFS_FAKE_NOROOT = '1';
 
 function makeErr(path: string, method: string) {
   const err: NodeJS.ErrnoException = new Error('this is fine');
