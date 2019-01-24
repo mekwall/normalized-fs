@@ -1,4 +1,4 @@
-import { chownErOk } from '../utils/chownErOk';
+import { chownErrOk } from '../utils/chownErrOk';
 import orgFs from 'fs';
 
 function chownFix<T extends Function>(fs: typeof orgFs, orig: T): T {
@@ -12,7 +12,7 @@ function chownFix<T extends Function>(fs: typeof orgFs, orig: T): T {
     return orig.call(fs, path, uid, gid, function(
       er?: NodeJS.ErrnoException | null
     ) {
-      if (chownErOk(er)) {
+      if (chownErrOk(er)) {
         er = null;
       }
       if (callback) callback.apply(fs, arguments as any);
@@ -31,7 +31,7 @@ function chownSyncFix<T extends Function>(fs: typeof orgFs, orig: T): T {
     try {
       return orig.call(fs, path, uid, gid);
     } catch (err) {
-      if (!chownErOk(err)) {
+      if (!chownErrOk(err)) {
         throw err;
       }
     }

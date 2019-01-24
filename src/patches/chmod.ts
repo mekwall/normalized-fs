@@ -1,4 +1,4 @@
-import { chownErOk } from '../utils/chownErOk';
+import { chownErrOk } from '../utils/chownErrOk';
 import orgFs from 'fs';
 
 function chmodFix<T extends any>(fs: typeof orgFs, orig: T): T {
@@ -11,7 +11,7 @@ function chmodFix<T extends any>(fs: typeof orgFs, orig: T): T {
     return orig.call(fs, path, mode, function(
       err: NodeJS.ErrnoException | null
     ) {
-      if (chownErOk(err)) {
+      if (chownErrOk(err)) {
         err = null;
       }
       if (callback) callback.apply(fs, arguments as any);
@@ -26,7 +26,7 @@ function chmodSyncFix<T extends any>(fs: typeof orgFs, orig: T): T {
     try {
       return orig.call(fs, path, mode);
     } catch (err) {
-      if (!chownErOk(err)) {
+      if (!chownErrOk(err)) {
         throw err;
       }
     }
