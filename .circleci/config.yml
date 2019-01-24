@@ -1,8 +1,6 @@
 version: 2.1
 
 commands:
-  working_directory: ~/repo
-
   save_deps:
     steps:
       - save_cache:
@@ -72,26 +70,31 @@ jobs:
   node_v6:
     docker:
       - image: node:6
+    working_directory: ~/repo
     steps:
       - build_and_test
   node_v8:
     docker:
       - image: node:8
+    working_directory: ~/repo
     steps:
       - build_and_test
   node_v10:
     docker:
       - image: node:10
+    working_directory: ~/repo
     steps:
       - build_and_test_with_coverage
   node_v11:
     docker:
       - image: node:11
+    working_directory: ~/repo
     steps:
       - build_and_test
   semantic_release:
     docker:
       - image: node:10
+    working_directory: ~/repo
     steps:
       - semantic_release
 
