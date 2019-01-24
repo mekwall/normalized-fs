@@ -1,5 +1,3 @@
-process.env.NFS_PLATFORM = 'win32';
-
 import fs from 'fs';
 import path from 'path';
 import nfs from '../../';
