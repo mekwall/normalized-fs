@@ -111,3 +111,9 @@ workflows:
             - node_v8
             - node_v10
             - node_v11
+          filters:
+            branches:
+              only:
+                - release
+                - beta
+                - alpha
