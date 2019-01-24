@@ -1,0 +1,63 @@
+{
+  "name": "normalized-fs",
+  "description": "A drop-in replacement for fs that normalizes its behavior",
+  "version": "0.0.0-semantic",
+  "keywords": [
+    "fs",
+    "module",
+    "reading",
+    "retry",
+    "retries",
+    "queue",
+    "error",
+    "errors",
+    "handling",
+    "EMFILE",
+    "EAGAIN",
+    "EINVAL",
+    "EPERM",
+    "EACCESS"
+  ],
+  "author": "Marcus Ekwall <marcus.ekwall@gmail.com>",
+  "license": "ISC",
+  "main": "./lib/index.js",
+  "types": "./lib/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mekwall/normalized-fs.git"
+  },
+  "bugs": {
+    "url": "https://github.com/mekwall/normalized-fs/issues"
+  },
+  "scripts": {
+    "build": "tsc --skipLibCheck --declaration -p tsconfig.build.json",
+    "lint-staged": "lint-staged",
+    "validate": "tsc --skipLibCheck --noEmit -p tsconfig.json",
+    "test": "node --expose_gc ./node_modules/jest/bin/jest --runInBand",
+    "codecov": "codecov",
+    "release": "semantic-release"
+  },
+  "devDependencies": {
+    "@semantic-release/changelog": "^3.0.2",
+    "@semantic-release/commit-analyzer": "^6.1.0",
+    "@semantic-release/git": "^7.0.7",
+    "@semantic-release/npm": "^5.1.3",
+    "@semantic-release/release-notes-generator": "^7.1.4",
+    "@types/jest": "^23.3.12",
+    "@types/next-tick": "^1.0.0",
+    "@types/node": "^10.12.18",
+    "@types/webpack-env": "^1.13.6",
+    "codecov": "^3.1.0",
+    "commitlint": "^7.2.1",
+    "husky": "^1.3.1",
+    "import-fresh": "^3.0.0",
+    "jest": "^23.6.0",
+    "jest-junit": "^5.2.0",
+    "lint-staged": "^8.1.0",
+    "prettier": "^1.15.3",
+    "semantic-release": "^15.13.2",
+    "ts-jest": "^23.10.5",
+    "tslint": "^5.12.0",
+    "typescript": "^3.2.2"
+  }
+}
