@@ -58,13 +58,13 @@ commands:
           paths:
             - .
 
-  publish:
+  semantic_release:
     steps:
       - attach_workspace:
-        at: ~/repo
+          at: ~/repo
       - run:
-        name: Release and publish
-        command: yarn release
+          name: Release and publish
+          command: yarn release
 
 jobs:
   node_v6:
@@ -87,11 +87,11 @@ jobs:
       - image: node:11
     steps:
       - build_and_test
-  publish_build:
+  semantic_release:
     docker:
       - image: node:10
     steps:
-      - publish
+      - semantic_release
 
 workflows:
   node-multi-build:
@@ -100,9 +100,9 @@ workflows:
       - node_v8
       - node_v10
       - node_v11
-      - publish_build:
+      - semantic_release:
           requires:
-            - node-v6
-            - node-v8
-            - node-v10
-            - node-v11
+            - node_v6
+            - node_v8
+            - node_v10
+            - node_v11
