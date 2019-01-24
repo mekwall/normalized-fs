@@ -1,0 +1,6 @@
+{
+  "name": "graceful-fs",
+  "description": "Replaces graceful-fs with normalized-fs",
+  "version": "4.1.15",
+  "main": "./index.js"
+}
