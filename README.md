@@ -1,8 +1,8 @@
 # normalized-fs
 
 [![GitHub license](https://img.shields.io/badge/license-ISC-blue.svg?style=flat-square)](https://github.com/mekwall/normalized-fs/blob/master/LICENSE)
-[![Build Status](https://img.shields.io/circleci/project/github/mekwall/normalized-fs.svg?style=flat-square)](https://circleci.com/gh/mekwall/normalized-fs)
-[![AppVeyor Tests](https://img.shields.io/appveyor/tests/NZSmartie/coap-net-iu0to.svg?style=flat-square)](https://ci.appveyor.com/project/mekwall/normalized-fs)
+[![CircleCI Status](https://img.shields.io/circleci/project/github/mekwall/normalized-fs.svg?style=flat-square&logo=circleci)](https://circleci.com/gh/mekwall/normalized-fs)
+[![AppVeyor Status](https://img.shields.io/appveyor/ci/mekwall/normalized-fs.svg?style=flat-square&logo=appveyor)](https://ci.appveyor.com/project/mekwall/normalized-fs)
 [![Coverage](https://img.shields.io/codecov/c/github/mekwall/normalized-fs/master.svg?style=flat-square)](https://codecov.io/github/mekwall/normalized-fs?branch=master)
 [![Dependencies](https://img.shields.io/librariesio/github/mekwall/normalized-fs.svg?style=flat-square)](https://github.com/mekwall/normalized-fs)
 
