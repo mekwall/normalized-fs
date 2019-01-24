@@ -23,7 +23,7 @@ describe('stat patch', () => {
       expect(fs.statSync(__filename).gid).toBe(-2);
     }
 
-    const expectedValue = process.platform !== 'win32' ? 0xfffffffe : 0;
+    const expectedValue = process.platform !== 'win32' ? 3434 : 0;
     const stat = nfs.statSync(__filename);
     expect(stat.uid).toBe(expectedValue);
     expect(stat.gid).toBe(expectedValue);
