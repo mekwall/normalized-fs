@@ -2,9 +2,9 @@ import fs from 'fs';
 import nfs from '../../';
 
 // mock fs.statSync to return signed uids/gids
-var realStatSync = fs.statSync;
+const realStatSync = fs.statSync;
 fs.statSync = function(path) {
-  var stats = realStatSync.call(fs, path);
+  const stats = realStatSync.call(fs, path);
   stats.uid = -2;
   stats.gid = -2;
   return stats;
@@ -15,18 +15,6 @@ describe('stat patch', () => {
     expect(nfs.Stats).toBe(fs.Stats);
     expect(fs.statSync(__filename)).toBeInstanceOf(fs.Stats);
     expect(nfs.statSync(__filename)).toBeInstanceOf(fs.Stats);
-  });
-
-  it('should return proper uid and gid', () => {
-    if (!process.env.TEST_NFS_GLOBAL_PATCH) {
-      expect(fs.statSync(__filename).uid).toBe(-2);
-      expect(fs.statSync(__filename).gid).toBe(-2);
-    }
-
-    const expectedValue = process.platform !== 'win32' ? 3434 : 0;
-    const stat = nfs.statSync(__filename);
-    expect(stat.uid).toBe(expectedValue);
-    expect(stat.gid).toBe(expectedValue);
   });
 
   it('should not throw when async stat fails', () => {
