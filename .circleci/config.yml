@@ -1,48 +1,108 @@
-version: 2
-jobs:
-  build:
-    docker:
-      - image: circleci/node:10
+version: 2.1
 
-    working_directory: ~/repo
+commands:
+  working_directory: ~/repo
 
+  save_deps:
     steps:
-      - checkout
+      - save_cache:
+          key: v{{ .Environment.CIRCLE_CACHE_VERSION }}-{{ arch }}-deps-{{ .Branch }}-{{ checksum "package.json" }}
+          paths:
+            - node_modules
 
+  restore_deps:
+    steps:
       - restore_cache:
           keys:
-            - v1-dependencies-{{ checksum "package.json" }}
-            # fallback to using the latest cache if no exact match is found
-            - v1-dependencies-
+            - v{{ .Environment.CIRCLE_CACHE_VERSION }}-{{ arch }}-deps-{{ .Branch }}-{{ checksum "package.json" }}
+            - v{{ .Environment.CIRCLE_CACHE_VERSION }}-{{ arch }}-deps-master-{{ checksum "package.json" }}
 
+  build_and_test:
+    steps:
+      - checkout
+      - restore_deps
       - run:
           name: Install dependencies
           command: yarn install
-
-      - save_cache:
-          paths:
-            - node_modules
-          key: v1-dependencies-{{ checksum "package.json" }}
-
+      - save_deps
       - run:
           name: Build
           command: yarn build
-
       - run:
-          name: Run tests
-          command: yarn test --ci --reporters=default --reporters=jest-junit --coverage
-          environment:
-            JEST_JUNIT_OUTPUT: 'reports/junit/js-test-results.xml'
+          name: Test
+          command: yarn test
 
+  build_and_test_with_coverage:
+    steps:
+      - checkout
+      - restore_deps
+      - run:
+          name: Install dependencies
+          command: yarn install
+      - save_deps
+      - run:
+          name: Build
+          command: yarn build
+      - run:
+          name: Test
+          command: yarn test --coverage
       - store_test_results:
           path: reports/junit
       - store_artifacts:
           path: reports/junit
-
       - run:
           name: Upload code coverage
           command: yarn codecov
+      - persist_to_workspace:
+          root: ~/repo
+          paths:
+            - .
 
+  publish:
+    steps:
+      - attach_workspace:
+        at: ~/repo
       - run:
-          name: Release and publish
-          command: yarn release
+        name: Release and publish
+        command: yarn release
+
+jobs:
+  node_v6:
+    docker:
+      - image: node:6
+    steps:
+      - build_and_test
+  node_v8:
+    docker:
+      - image: node:8
+    steps:
+      - build_and_test
+  node_v10:
+    docker:
+      - image: node:10
+    steps:
+      - build_and_test_with_coverage
+  node_v11:
+    docker:
+      - image: node:11
+    steps:
+      - build_and_test
+  publish_build:
+    docker:
+      - image: node:10
+    steps:
+      - publish
+
+workflows:
+  node-multi-build:
+    jobs:
+      - node_v6
+      - node_v8
+      - node_v10
+      - node_v11
+      - publish_build:
+          requires:
+            - node-v6
+            - node-v8
+            - node-v10
+            - node-v11
