@@ -64,7 +64,10 @@ commands:
           at: ~/repo
       - run:
           name: Release and publish
-          command: yarn release
+          command: |
+            # Solves the issue with the wrong RSA key in known_hosts
+            ssh-keyscan github.com >> ~/.ssh/known_hosts
+            yarn release
 
 jobs:
   node_v6:
