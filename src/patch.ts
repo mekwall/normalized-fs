@@ -15,13 +15,12 @@ import { patchWriteStream } from './patches/writeStream';
 import { patchChmod } from './patches/chmod';
 import { patchAppendFile } from './patches/appendFile';
 import { patchStat } from './patches/stat';
+import { NFS_INTERNAL_TEST } from './constants';
 
 declare module 'fs' {
   let __patched: boolean;
   let normalize: typeof patch;
 }
-
-const __TEST__ = !!process.env.NFS_INTERNAL_TEST;
 
 export const patch = (fs: typeof orgFs) => {
   // (re-)implement some things that are known busted or missing.
@@ -30,7 +29,7 @@ export const patch = (fs: typeof orgFs) => {
   // lchmod, broken prior to 0.6.2
   // back-port the fix here.
   if (
-    __TEST__ ||
+    NFS_INTERNAL_TEST ||
     (constants.hasOwnProperty('O_SYMLINK') &&
       process.version.match(/^v0\.6\.[0-2]|^v0\.5\./))
   ) {
@@ -38,7 +37,7 @@ export const patch = (fs: typeof orgFs) => {
   }
 
   // lutimes implementation, or no-op
-  if (__TEST__ || !fs.lutimes) {
+  if (NFS_INTERNAL_TEST || !fs.lutimes) {
     patchLutimes(fs);
   }
 

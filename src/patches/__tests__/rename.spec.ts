@@ -1,9 +1,10 @@
 import fs from 'fs';
 import { normalize } from '../../';
 import path from 'path';
+import { NFS_WIN32_TIMEOUT } from '../../constants';
 
 // This might take longer than 5 seconds
-jest.setTimeout(30000);
+jest.setTimeout(NFS_WIN32_TIMEOUT * 4);
 
 const tmpDir = path.join(__dirname, '.tmp');
 const testFiles: string[] = [];

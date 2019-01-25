@@ -1,9 +1,6 @@
 import orgFs from 'fs';
 import os from 'os';
-
-const win32MaxBackoff = process.env.NFS_WIN32_MAX_BACKOFF
-  ? parseInt(process.env.NFS_WIN32_MAX_BACKOFF, 10)
-  : 60000;
+import { NFS_INTERNAL_TEST, NFS_WIN32_TIMEOUT } from '../constants';
 
 function renameFix<T extends typeof orgFs.rename>(fs: typeof orgFs, org: T): T {
   const newFunc: any = function(
@@ -29,7 +26,7 @@ function renameFix<T extends typeof orgFs.rename>(fs: typeof orgFs, org: T): T {
     }
     const start = Date.now();
     let backoff = 0;
-    let backoffUntil = start + win32MaxBackoff;
+    let backoffUntil = start + NFS_WIN32_TIMEOUT;
     org.call(fs, from, to, function CB(er: NodeJS.ErrnoException) {
       if (
         er &&
@@ -58,7 +55,12 @@ function renameFix<T extends typeof orgFs.rename>(fs: typeof orgFs, org: T): T {
           });
         }, backoff);
         if (backoff < 250) backoff += 10;
-      } else if (backoff && er && er.code === 'ENOENT') {
+      } else if (
+        backoff &&
+        backoffUntil > start &&
+        er &&
+        er.code === 'ENOENT'
+      ) {
         // The source does no longer exist so we
         // can assume it was moved during one of the tries
         if (callback) callback(null);
@@ -90,19 +92,19 @@ function renameSyncFix<T extends typeof orgFs.renameSync>(
       }
       // ignore other errors
     }
-    var start = Date.now();
-    var backoff = 0;
-    var backoffUntil = start + win32MaxBackoff;
+    let backoff = 0;
+    const start = Date.now();
+    const backoffUntil = start + NFS_WIN32_TIMEOUT;
     function tryRename() {
       try {
         org.call(fs, from, to);
       } catch (e) {
         if (
           (e.code === 'EACCS' || e.code === 'EPERM') &&
-          start < backoffUntil
+          backoffUntil > start
         ) {
           if (backoff < 100) backoff += 10;
-          var waitUntil = Date.now() + backoff;
+          const waitUntil = Date.now() + backoff;
           while (waitUntil > Date.now()) {}
           tryRename();
         } else if (backoff > 0 && e.code === 'ENOENT') {
@@ -137,8 +139,8 @@ export const patchRename = (fs: typeof orgFs) => {
   // These win32-only overrides try to normalize fs.rename/renameSync
   // behavior so it's more in line with how it works on Linux and OSX.
   // It does this by retrying a failed rename for up to 5 seconds (or
-  // value of NFS_WIN32_MAX_BACKOFF) until actually failing.
-  if (process.env.NFS_INTERNAL_TEST || os.platform() === 'win32') {
+  // value of NFS_WIN32_TIMEOUT) until actually failing.
+  if (NFS_INTERNAL_TEST || os.platform() === 'win32') {
     fs.rename = renameFix(fs, fs.rename);
     fs.renameSync = renameSyncFix(fs, fs.renameSync);
   }
