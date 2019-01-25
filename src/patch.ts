@@ -15,6 +15,7 @@ import { patchWriteStream } from './patches/writeStream';
 import { patchChmod } from './patches/chmod';
 import { patchAppendFile } from './patches/appendFile';
 import { patchStat } from './patches/stat';
+import { patchUnlink } from './patches/unlink';
 import { NFS_INTERNAL_TEST } from './constants';
 
 declare module 'fs' {
@@ -46,6 +47,7 @@ export const patch = (fs: typeof orgFs) => {
   patchChown(fs);
   patchChmod(fs);
   patchRename(fs);
+  patchUnlink(fs);
   patchRead(fs);
   patchReadDir(fs);
   patchReadFile(fs);
