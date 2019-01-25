@@ -19,7 +19,10 @@ A drop-in replacement for `fs` that aims to normalize the behavior across differ
 
 ### Windows-specific improvements
 
-- It makes renaming more resilient by retrying a rename for up to 60 seconds if EACCESS or EPERM error occurs. This can happen if the path has been locked by another process.
+> NOTE: Due to how Windows lock files based on usage we need to add some workarounds that makes these operations more resilient. The timeout used for these operations can be overridden with the `NFS_WIN32_TIMEOUT` env variable and is set to 5000 milliseconds as default.
+
+- rename/renameSync: Retry a failed rename until timeout is reached if EACCESS or EPERM error occurs.
+- unlink/unlinkSync: Ensure that file is seen as removed by Node before seen as suceeded/failed
 
 ## Installation
 
