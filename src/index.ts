@@ -4,9 +4,7 @@ import { patch } from './patch';
 import { retry } from './queue';
 import { fixer } from './utils/fixer';
 
-const PATCH_GLOBAL =
-  process.env.TEST_GRACEFUL_FS_GLOBAL_PATCH && !orgFs.__patched;
-
+const PATCH_GLOBAL = process.env.TEST_NFS_GLOBAL_PATCH && !orgFs.__patched;
 const fs = PATCH_GLOBAL ? patch(orgFs) : patch(clone(orgFs));
 
 // Always patch fs.close/closeSync, because we want to
@@ -48,6 +46,7 @@ if (!/\bnormalized-fs\b/.test(fs.closeSync.toString())) {
   fs.close = close;
 }
 
+export const normalize = fs.normalize;
 const exportedFs: typeof orgFs = { ...fs, close, closeSync };
 export default exportedFs;
 module.exports = exportedFs;
