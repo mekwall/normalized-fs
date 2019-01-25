@@ -30,8 +30,8 @@ const fnNames = [
 ];
 
 const orgFunctions = fnNames.map((name) => require('fs')[name]);
-const patchedFsSource = require('../index');
-const patchedFsBuild = require('import-fresh')('../../lib/index');
+const patchedFsSource = require('../');
+const patchedFsBuild = require('import-fresh')('../../lib');
 
 describe('patching from source', () => {
   fnNames.forEach((name, i) => {

@@ -1,7 +1,9 @@
-import nfs from '../../';
+import fs from 'fs';
+import { normalize } from '../../';
 import path from 'path';
 
 describe('readStream patch', () => {
+  const nfs = normalize(fs);
   const tmpFiles: string[] = [];
   const tmpDir = path.resolve(__dirname, '.tmp');
 

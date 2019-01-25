@@ -1,4 +1,5 @@
-import fs from '../';
+import fs from 'fs';
+import { normalize } from '../';
 
 var methods: any[][] = [
   ['open', 'r'],
@@ -22,19 +23,20 @@ describe('ensure ENOENT', () => {
   methods.forEach((args) => {
     it(`should throw ENOENT for ${args[0]}`, (done) => {
       expect.assertions(3);
+      const nfs: any = normalize(fs);
       const method = args.shift();
       args.unshift(file);
       const methodSync = method + 'Sync';
-      expect(
-        jest.fn(() => (fs as any)[methodSync].apply(fs, args))
-      ).toThrowError(/ENOENT/);
+      expect(jest.fn(() => nfs[methodSync].apply(fs, args))).toThrowError(
+        /ENOENT/
+      );
       // add the callback
       args.push((e: NodeJS.ErrnoException) => {
         expect(e).toBeTruthy();
         expect(e.code).toBe('ENOENT');
         done();
       });
-      (fs as any)[method].apply(fs, args);
+      nfs[method].apply(fs, args);
     });
   });
 });

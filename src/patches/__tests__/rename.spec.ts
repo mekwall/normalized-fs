@@ -1,6 +1,6 @@
 import fs from 'fs';
+import { normalize } from '../../';
 import path from 'path';
-import nfs from '../../';
 
 const tmpDir = path.join(__dirname, '.tmp');
 const testFiles: string[] = [];
@@ -13,6 +13,8 @@ function anyFileExists(files: string[]) {
 }
 
 describe('rename patch: files', () => {
+  const nfs = normalize(fs);
+
   beforeEach(() => {
     let id = 0;
     try {
@@ -71,6 +73,7 @@ describe('rename patch: files', () => {
 });
 
 describe('rename patch: directories', () => {
+  const nfs = normalize(fs);
   const testDir1 = path.join(tmpDir, 'testDir1');
   const testDir2 = path.join(tmpDir, 'testDir2');
 

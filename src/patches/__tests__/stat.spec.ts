@@ -1,5 +1,5 @@
 import fs from 'fs';
-import nfs from '../../';
+import { normalize } from '../../';
 
 // mock fs.statSync to return signed uids/gids
 const realStatSync = fs.statSync;
@@ -11,6 +11,7 @@ fs.statSync = function(path) {
 };
 
 describe('stat patch', () => {
+  const nfs = normalize(fs);
   it('should use the same stats constructor as fs', () => {
     expect(nfs.Stats).toBe(fs.Stats);
     expect(fs.statSync(__filename)).toBeInstanceOf(fs.Stats);
