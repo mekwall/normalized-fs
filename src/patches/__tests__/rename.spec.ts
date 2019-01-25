@@ -3,8 +3,8 @@ import { normalize } from '../../';
 import path from 'path';
 import { NFS_WIN32_TIMEOUT } from '../../constants';
 
-// This might take longer than 5 seconds
-jest.setTimeout(NFS_WIN32_TIMEOUT * 4);
+// This op can take a long time on Windows due to locked files
+jest.setTimeout(NFS_WIN32_TIMEOUT * 10);
 
 const tmpDir = path.join(__dirname, '.tmp');
 const testFiles: string[] = [];
