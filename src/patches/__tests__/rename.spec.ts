@@ -2,6 +2,9 @@ import fs from 'fs';
 import { normalize } from '../../';
 import path from 'path';
 
+// This might take longer than 5 seconds
+jest.setTimeout(30000);
+
 const tmpDir = path.join(__dirname, '.tmp');
 const testFiles: string[] = [];
 
