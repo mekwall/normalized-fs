@@ -1,4 +1,4 @@
-if (process.env.NODE_ENV === 'test') {
+if (process.env.NFS_INTERNAL_TEST) {
   const fs = require('fs');
   module.exports = fs;
   module.exports.gracefulify = () => fs;

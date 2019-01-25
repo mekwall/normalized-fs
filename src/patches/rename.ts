@@ -138,7 +138,7 @@ export const patchRename = (fs: typeof orgFs) => {
   // behavior so it's more in line with how it works on Linux and OSX.
   // It does this by retrying a failed rename for up to 5 seconds (or
   // value of GRACEFUL_FS_WIN32_MAX_BACKOFF) until actually failing.
-  if (process.env.NODE_ENV === 'test' || os.platform() === 'win32') {
+  if (process.env.NFS_INTERNAL_TEST || os.platform() === 'win32') {
     fs.rename = renameFix(fs, fs.rename);
     fs.renameSync = renameSyncFix(fs, fs.renameSync);
   }

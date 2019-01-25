@@ -1,3 +1,4 @@
+process.env.NFS_INTERNAL_TEST = '1';
 module.exports = {
   reporters: ['default', 'jest-junit'],
   moduleFileExtensions: ['ts', 'js'],

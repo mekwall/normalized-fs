@@ -21,7 +21,7 @@ declare module 'fs' {
   let normalize: typeof patch;
 }
 
-const __TEST__ = process.env.NODE_ENV === 'test';
+const __TEST__ = !!process.env.NFS_INTERNAL_TEST;
 
 export const patch = (fs: typeof orgFs) => {
   // (re-)implement some things that are known busted or missing.
